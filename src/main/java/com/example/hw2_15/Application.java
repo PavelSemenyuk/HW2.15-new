@@ -3,45 +3,73 @@ package com.example.hw2_15;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Arrays;
+
 @SpringBootApplication
 public class Application {
 
     public static void main(String[] args) {
-        MyArrayList myArrayList =new MyArrayList();
-        myArrayList.add("Ivan1");
-        myArrayList.add("Ivan2");
-        myArrayList.add("Petr1");
-        myArrayList.add("Ivan4");
-        myArrayList.add("Ivan5");
-        myArrayList.add("Ivan6");
-        myArrayList.add("Ivan7");
-        myArrayList.add("Ivan8");
-        myArrayList.add("Ivan9");
+        int[] arr1 = generateRandomArray();
+        int[] arr2 = Arrays.copyOf(arr1, arr1.length);
+        int[] arr3 = Arrays.copyOf(arr1, arr1.length);
 
+        System.out.println(arr1[1]);
+        System.out.println(arr2[1]);
+        System.out.println(arr3[1]);
 
-
-        MyArrayList myArrayList1 = new MyArrayList();
-        myArrayList1.add("Ivan1");
-        myArrayList1.add("Ivan2");
-        myArrayList1.add("Ivan3");
-        myArrayList1.add("Ivan4");
-        myArrayList1.add("Ivan5");
-        myArrayList1.add("Ivan6");
-        myArrayList1.add("Ivan7");
-        myArrayList1.add("Ivan8");
-        myArrayList1.add("Ivan9");
-
-        myArrayList1.set(2,"Petr1");
-
-        for (int i = 0; i < myArrayList.size(); i++) {
-            System.out.println(myArrayList.toArray()[i]+ ", ");
-        }
-
-        for (int i = 0; i < myArrayList1.size(); i++) {
-            System.out.println(myArrayList1.toArray()[i]+ ", ");
-        }
-
-        System.out.println(myArrayList.equals(myArrayList1));
+        long start1 = System.currentTimeMillis();
+        sortInsertion(arr2);
+        System.out.println(System.currentTimeMillis() - start1);
     }
 
+    public static int[] generateRandomArray() {
+        java.util.Random random = new java.util.Random();
+        int[] arr = new int[100_000];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = random.nextInt(100_000) + 100_000;
+        }
+        return arr;
+    }
+
+    private static void swapElements(int[] arr, int indexA, int indexB) {
+        int tmp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = tmp;
+    }
+
+
+    private static void sortSelection(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            int minIndex = i;
+            for (int j = 0; j < arr.length; j++) {
+                if (arr[j] < arr[minIndex]) {
+                    minIndex = j;
+                }
+            }
+            swapElements(arr, i, minIndex);
+        }
+    }
+
+    private static void sortInsertion(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            int temp = arr[i];
+            int j = i;
+            while (j > 0 && arr[j - 1] >= temp) {
+                arr[j] = arr[j - 1];
+                j--;
+            }
+            arr[j] = temp;
+        }
+    }
+
+    private static void sortBubble(int[] arr) {
+        for (int i = 0; i < arr.length - 1; i++) {
+            for (int j = 0; j < arr.length - 1 - i; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    swapElements(arr, j, j + 1);
+
+                }
+            }
+        }
+    }
 }
